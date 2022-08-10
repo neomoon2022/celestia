@@ -1,0 +1,1 @@
+docker build -t celestia-node:1 .

@@ -1,5 +1,9 @@
 FROM ubuntu:22.04 as base
 
+# ARGs
+ARG GIT_BRANCH
+ARG APP_VERSION
+
 # Install Dependencies
 RUN apt update -y
 RUN apt install curl tar wget clang pkg-config libssl-dev jq build-essential git make ncdu -y
@@ -17,10 +21,10 @@ RUN rm "go1.18.2.linux-amd64.tar.gz"
 ENV PATH "$PATH:/usr/local/go/bin:$HOME/go/bin" 
 
 # Install Celestia Node
-RUN rm -rf celestia-node
 RUN git clone https://github.com/celestiaorg/celestia-node.git
 WORKDIR $HOME/celestia-node
-RUN git checkout tags/v0.3.0-rc2
+
+RUN git checkout tags/$GIT_BRANCH
 RUN make install
 
 # Add Celestia to $PATH:
@@ -29,10 +33,19 @@ ENV PATH "$PATH:/root/go/bin"
 # Write to bashrc
 RUN echo "export PATH=${PATH}" >> /root/.bashrc
 
+# Install Celestia APP
+WORKDIR $HOME
+RUN git clone https://github.com/celestiaorg/celestia-app.git
+
+WORKDIR $HOME/celestia-app
+
+RUN git checkout tags/$APP_VERSION -b $APP_VERSION
+RUN make install
+
+RUN celestia-appd --help
+
 # Set parameters
 ENV ENDPOINT "<none>"
 
 # Start
 CMD celestia light init && celestia light start --core.grpc https://rpc-mamaki.pops.one:9090
-
-

@@ -1,0 +1,4 @@
+/celestia-app-files/*
+!/celestia-app-files/.gitkeep
+/networks
+/celestia-app

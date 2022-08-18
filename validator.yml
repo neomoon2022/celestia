@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  validator:
+    image: celestia-app:latest
+    container_name: validator
+    restart: on-failure
+    networks:
+      - celestia-public
+    restart: on-failure
+    ports:
+      - 26657:26657
+      - 26658:26658
+    environment:
+      - CELESTIA_HOME=/root
+    volumes:
+      - $PWD/celestia-app-files:/root
+    command:
+      - start
+
+networks:
+  celestia-public:
+    external: true

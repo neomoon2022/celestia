@@ -1,0 +1,1 @@
+curl -s localhost:26657/status | jq .result | jq .sync_info

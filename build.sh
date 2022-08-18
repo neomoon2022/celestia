@@ -6,7 +6,7 @@ echo "Checking $GIT_BRANCH ..."
 echo "\nDownloading repo..."
 rm -rf celestia-app
 git clone https://github.com/celestiaorg/celestia-app.git
-git checkout tags/$APP_VERSION -b $APP_VERSION
+git checkout "tags/$APP_VERSION" -b $APP_VERSION
 
 echo "\nBuinding image..."
 cd celestia-app
